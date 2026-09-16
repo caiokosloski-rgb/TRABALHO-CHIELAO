@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expresso da Meia-Noite - Jogo de Investigação</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="game-container">
+        
+        <!-- TELA DE LOGIN / ENTRADA -->
+        <section id="tela-login" class="game-card">
+            <div class="card-header text-center">
+                <h1>🕵️‍♂️ AGÊNCIA DE INVESTIGAÇÃO</h1>
+                <p>Insira suas credenciais para assumir o Caso do Trem</p>
+            </div>
+            <div class="login-badge">
+                <div class="badge-photo">👤</div>
+                <div class="form-group">
+                    <label for="nome-detetive">Nome do Detetive:</label>
+                    <input type="text" id="nome-detetive" placeholder="Ex: Sherlock, Poirot..." autocomplete="off">
+                </div>
+                <div class="form-group">
+                    <label for="senha-detetive">Código da Agência (Senha):</label>
+                    <input type="password" id="senha-detetive" placeholder="Digite qualquer senha">
+                </div>
+                <p id="login-erro" class="feedback-texto erro hidden">Por favor, digite o seu nome de detetive.</p>
+                <button class="btn-principal" onclick="autenticarDetetive()">Autenticar e Entrar no Trem 🚂</button>
+            </div>
+        </section>
+
+        <!-- CABEÇALHO DO JOGO (Fica oculto no login) -->
+        <header id="jogo-header" class="hidden">
+            <h1>🕵️‍♂️ Detetive: <span id="player-name-display"></span></h1>
+            <p>Caso 1: O Crime no Vagão Poltrona</p>
+        </header>
+
+        <!-- FASE 1: INVESTIGAÇÃO -->
+        <section id="fase-investigacao" class="game-card hidden">
+            <div class="card-header">
+                <h2>1. Investigando os Vagões</h2>
+                <p>Analise os locais abaixo para encontrar pistas antes que o culpado note sua presença.</p>
+            </div>
+            
+            <div class="vagoes-container">
+                <button class="btn-vagao" id="btn-v3" onclick="investigar(3, 'Vagão 3 (Carga)', 'A porta dos fundos está trancada por dentro e completamente bloqueada com caixas pesadas.')">Vagão 3 (Carga)</button>
+                <button class="btn-vagao" id="btn-v5" onclick="investigar(5, 'Vagão 5 (Jantar)', 'Passaporte falso em nome de outro passageiro foi achado rasgado sob a mesa 4.')">Vagão 5 (Jantar)</button>
+                <button class="btn-vagao" id="btn-maq" onclick="investigar('M', 'Cabine do Maquinista', 'O maquinista jura que trancou a plataforma externa e ninguém passou por lá.')">Cabine do Maquinista</button>
+                <button class="btn-vagao" id="btn-obj" onclick="investigar('O', 'Chão do Corredor', 'Um relógio de bolso quebrado no chão, com o ponteiro parado às 23:45.')">Objeto no Chão</button>
+            </div>
+
+            <div class="quadro-pistas">
+                <h3>📌 Seu Quadro de Evidências (<span id="pistas-contador">0</span>/4):</h3>
+                <ul id="lista-pistas">
+                    <li class="pista-vazia">Nenhuma pista coletada ainda. Explore os vagões acima.</li>
+                </ul>
+            </div>
+
+            <button id="btn-avancar-fase" class="btn-principal" onclick="iniciarPerseguicao()" disabled>
+                Avançar: O Culpado Notou Você! 🚨
+            </button>
+        </section>
+
+        <!-- FASE 2: A PERSEGUIÇÃO -->
+        <section id="fase-perseguicao" class="game-card hidden">
+            <div class="card-header">
+                <h2>🚨 A Perseguição!</h2>
+                <p>O suspeito correu! Use sua memória do quadro de evidências para escolher o caminho correto rapidamente.</p>
+            </div>
+
+            <div class="tela-corrida">
+                <div class="cenario-movimento"></div>
+                <div class="player-mock">🏃‍♂️</div>
+                <div id="obstaculo-texto" class="alerta-obstaculo">O suspeito fechou uma porta! Para onde você vai?</div>
+            </div>
+
+            <div class="botoes-decisao">
+                <button class="btn-escolha" onclick="escolherCaminho('carga')">← Ir para o Vagão de Carga</button>
+                <button class="btn-escolha" onclick="escolherCaminho('plataforma')">Ir para a Plataforma →</button>
+            </div>
+            <p id="resultado-corrida" class="feedback-texto"></p>
+        </section>
+
+        <!-- FASE 3: INTERROGATÓRIO FINAL -->
+        <section id="fase-interrogatorio" class="game-card hidden">
+            <div class="card-header">
+                <h2>⚖️ Interrogatório Final</h2>
+                <p>O suspeito está encurralado. Monte a linha lógica de dedução clicando nos elementos na ordem correta:</p>
+                <strong class="ordem-esperada">Ordem correta: Motivo → Oportunidade → Evidência → Contradição</strong>
+            </div>
+
+            <div class="pistas-interrogatorio">
+                <button class="btn-pista-interrogatorio" id="pista-evidencia" onclick="selecionarDeducao('evidencia', 'Evidência: Passaporte Falso')">Evidência: Passaporte Falso</button>
+                <button class="btn-pista-interrogatorio" id="pista-motivo" onclick="selecionarDeducao('motivo', 'Motivo: Dívida de Jogo')">Motivo: Dívida de Jogo</button>
+                <button class="btn-pista-interrogatorio" id="pista-contradicacao" onclick="selecionarDeducao('contradicacao', 'Contradição: Álibi do Maquinista')">Contradição: Álibi do Maquinista</button>
+                <button class="btn-pista-interrogatorio" id="pista-oportunidade" onclick="selecionarDeducao('oportunidade', 'Oportunidade: Sumiço no Jantar')">Oportunidade: Sumiço no Jantar</button>
+            </div>
+
+            <div class="linha-deducao">
+                <h3>Sua Linha de Raciocínio:</h3>
+                <div id="fluxo-deducao" class="fluxo-container">
+                    <span class="placeholder-fluxo">Nenhum argumento selecionado...</span>
+                </div>
+            </div>
+
+            <div class="botoes-finais">
+                <button class="btn-reset" onclick="resetInterrogatorio()">Limpar Sequência</button>
+                <button class="btn-principal" onclick="verificarFinal()">Dar Veredito Final</button>
+            </div>
+        </section>
+
+        <!-- TELA DE FINAIS -->
+        <section id="fase-resultado" class="game-card hidden">
+            <div id="resultado-box" class="resultado-box">
+                <h2 id="titulo-final"></h2>
+                <p id="desc-final"></p>
+                <button class="btn-principal" onclick="window.location.reload()">Jogar Novamente 🔄</button>
+            </div>
+        </section>
+    </div>
+
+    <!-- LÓGICA DO JOGO -->
+    <script>
+        let pistasColetadas = 0;
+        let perdeuTempoNaCorrida = false;
+        let sequenciaDeducao = [];
+        let detetiveNome = "";
+
+        function autenticarDetetive() {
+            const nomeInput = document.getElementById('nome-detetive').value.trim();
+            const erro = document.getElementById('login-erro');
+
+            if (nomeInput === "") {
+                erro.classList.remove('hidden');
+                return;
+            }
+
+            detetiveNome = nomeInput;
+            document.getElementById('player-name-display').innerText = detetiveNome;
+            
+            // Transição de tela
+            document.getElementById('tela-login').classList.add('hidden');
+            document.getElementById('jogo-header').classList.remove('hidden');
+            document.getElementById('fase-investigacao').classList.remove('hidden');
+        }
+
+        function investigar(id, local, texto) {
+            const lista = document.getElementById('lista-pistas');
+            if (pistasColetadas === 0) lista.innerHTML = '';
+            
+            if (!document.getElementById(`pista-${id}`)) {
+                const li = document.createElement('li');
+                li.id = `pista-${id}`;
+                li.className = 'pista-item';
+                li.innerHTML = `<strong>${local}:</strong> ${texto}`;
+                lista.appendChild(li);
+                
+                pistasColetadas++;
+                document.getElementById('pistas-contador').innerText = pistasColetadas;
+                
+                // Desativa o botão clicado para feedback visual
+                if(id === 3) document.getElementById('btn-v3').classList.add('coletado');
+                if(id === 5) document.getElementById('btn-v5').classList.add('coletado');
+                if(id === 'M') document.getElementById('btn-maq').classList.add('coletado');
+                if(id === 'O') document.getElementById('btn-obj').classList.add('coletado');
+            }
+
+            if (pistasColetadas >= 4) {
+                document.getElementById('btn-avancar-fase').disabled = false;
+            }
+        }
+
+        function iniciarPerseguicao() {
+            document.getElementById('fase-investigacao').classList.add('hidden');
+            document.getElementById('fase-perseguicao').classList.remove('hidden');
+        }
+
+        function escolherCaminho(caminho) {
+            const feedback = document.getElementById('resultado-corrida');
+            
+            if (caminho === 'carga') {
+                feedback.className = "feedback-texto erro";
+                feedback.innerText = "❌ VOCÊ BATEU COM A CARA NAS CAIXAS! O Vagão de Carga estava bloqueado (sua investigação avisou!). Você perdeu tempo precioso removendo os obstáculos.";
+                perdeuTempoNaCorrida = true;
+            } else {
+                feedback.className = "feedback-texto acerto";
+                feedback.innerText = "✅ CAMINHO LIMPO! Você lembrou que o Maquinista garantiu que a plataforma estava livre. Você passou voando pelas portas e encurralou o alvo!";
+                perdeuTempoNaCorrida = false;
+            }
+            
+            // Bloqueia novos cliques nos caminhos

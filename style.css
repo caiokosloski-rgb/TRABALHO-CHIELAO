@@ -1,0 +1,377 @@
+:root {
+    --bg: #090a0f;
+    --card-bg: #131722;
+    --accent: #ff4757;
+    --text: #f1f2f6;
+    --text-muted: #a4b0be;
+    --blue: #1e90ff;
+    --green: #2ed573;
+    --yellow: #ffa502;
+    --badge-bg: #1c2230;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: var(--bg);
+    color: var(--text);
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.game-container {
+    width: 100%;
+    max-width: 650px;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+header h1 {
+    font-size: 1.8rem;
+    color: var(--accent);
+}
+
+header p {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.game-card {
+    background-color: var(--card-bg);
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+    border: 1px solid #23293a;
+    margin-bottom: 20px;
+}
+
+.card-header h2 {
+    font-size: 1.25rem;
+    margin-bottom: 5px;
+    color: var(--blue);
+}
+
+.card-header p {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 15px;
+}
+
+.text-center { text-align: center; }
+
+/* TELA DE LOGIN / CRACHÁ */
+.login-badge {
+    background-color: var(--badge-bg);
+    border: 2px dashed var(--blue);
+    border-radius: 8px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.badge-photo {
+    font-size: 3.5rem;
+    background: #2f3542;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 3px solid var(--blue);
+}
+
+.form-group {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.form-group label {
+    font-size: 0.85rem;
+    font-weight: bold;
+    color: var(--text-muted);
+}
+
+.form-group input {
+    background-color: #090a0f;
+    border: 1px solid #2f3542;
+    padding: 12px;
+    border-radius: 6px;
+    color: white;
+    font-size: 1rem;
+    outline: none;
+}
+
+.form-group input:focus {
+    border-color: var(--blue);
+}
+
+/* FASE 1: BOTOES DE INVESTIGAÇÃO */
+.vagoes-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.btn-vagao {
+    background-color: #222836;
+    color: var(--text);
+    border: 1px solid #3b445c;
+    padding: 15px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.2s;
+}
+
+.btn-vagao:hover {
+    background-color: var(--blue);
+    border-color: white;
+}
+
+.btn-vagao.coletado {
+    border-color: var(--green);
+    background-color: rgba(46, 213, 115, 0.1);
+    color: var(--green);
+}
+
+.quadro-pistas {
+    background-color: #23160e;
+    border: 4px solid #140d08;
+    padding: 15px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+}
+
+.quadro-pistas h3 {
+    font-size: 0.95rem;
+    color: var(--yellow);
+    margin-bottom: 10px;
+}
+
+.pista-vazia {
+    color: #a4b0be;
+    font-style: italic;
+    font-size: 0.85rem;
+    list-style: none;
+}
+
+.pista-item {
+    background-color: #fffdf2;
+    color: #1e222b;
+    padding: 8px 12px;
+    margin-bottom: 8px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    list-style: none;
+    border-left: 5px solid var(--accent);
+}
+
+/* FASE 2: MOCKUP CORRIDA SUBWAY SURFERS */
+.tela-corrida {
+    background: linear-gradient(to bottom, #020205, #111625);
+    height: 160px;
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.cenario-movimento {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent 49%, #222836 50%, transparent 51%);
+    background-size: 30px 100%;
+    opacity: 0.4;
+}
+
+.player-mock {
+    font-size: 2.8rem;
+    z-index: 2;
+    animation: saltar 0.4s infinite alternate;
+}
+
+@keyframes saltar {
+    from { transform: translateY(0); }
+    to { transform: translateY(-12px); }
+}
+
+.alerta-obstaculo {
+    position: absolute;
+    top: 15px;
+    background-color: rgba(0,0,0,0.85);
+    padding: 6px 15px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    border: 1px solid var(--accent);
+    color: #ff6b81;
+}
+
+.botoes-decisao {
+    display: flex;
+    gap: 12px;
+    margin-top: 15px;
+}
+
+.btn-escolha {
+    flex: 1;
+    background-color: var(--accent);
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.btn-escolha:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.feedback-texto {
+    margin-top: 15px;
+    font-size: 0.9rem;
+    text-align: center;
+    font-weight: bold;
+    line-height: 1.4;
+}
+
+.feedback-texto.erro { color: var(--accent); }
+.feedback-texto.acerto { color: var(--green); }
+
+/* FASE 3: INTERROGATÓRIO */
+.ordem-esperada {
+    display: block;
+    background-color: #0b0d13;
+    padding: 8px;
+    border-radius: 4px;
+    color: var(--yellow);
+    font-size: 0.8rem;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.pistas-interrogatorio {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.btn-pista-interrogatorio {
+    background-color: #222836;
+    color: white;
+    border: 1px solid #3b445c;
+    padding: 12px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.btn-pista-interrogatorio.used {
+    opacity: 0.25;
+    cursor: not-allowed;
+    border-color: transparent;
+}
+
+.linha-deducao {
+    background-color: #0b0d13;
+    padding: 15px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+}
+
+.linha-deducao h3 {
+    font-size: 0.85rem;
+    margin-bottom: 10px;
+    color: var(--text-muted);
+}
+
+.fluxo-container {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    min-height: 35px;
+    align-items: center;
+}
+
+.placeholder-fluxo {
+    color: #4b5563;
+    font-style: italic;
+    font-size: 0.85rem;
+}
+
+.etapa-bloco {
+    background-color: var(--blue);
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.btn-reset {
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid #3b445c;
+    padding: 10px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+/* CARDS DE RESULTADO FINAL */
+.resultado-box {
+    padding: 25px 15px;
+    border-radius: 8px;
+    text-align: center;
+}
+.resultado-box h2 { margin-bottom: 12px; font-size: 1.5rem; }
+.resultado-box p { margin-bottom: 25px; line-height: 1.5; font-size: 0.95rem; }
+
+.resultado-box.verde { background-color: rgba(46, 213, 115, 0.15); border: 2px solid var(--green); }
+.resultado-box.amarelo { background-color: rgba(255, 165, 2, 0.15); border: 2px solid var(--yellow); }
+.resultado-box.vermelho { background-color: rgba(255, 71, 87, 0.15); border: 2px solid var(--accent); }
+
+/* COMPONENTES GERAIS */
+.btn-principal {
+    width: 100%;
+    background-color: var(--green);
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.btn-principal:disabled {
+    background-color: #2f3542;
+    cursor: not-allowed;
+    opacity: 0.4;
+}
+
+.hidden { display: none !important; }
